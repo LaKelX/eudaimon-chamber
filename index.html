@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Chamber</title>
+<meta name="description" content="An AI training chamber you can rent on GitHub. A Market Mind trains for simulated centuries in seconds, then sits an exam against a newborn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,800&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0b0b0c; --panel:#131315; --panel2:#19191c; --line:#26262a; --text:#ecebe7; --muted:#9a978f; --faint:#6d6a64; --gold:#c9a75e;
+    --a:#3987e5; --b:#d95926; --mono:"JetBrains Mono", ui-monospace, Menlo, monospace; --serif:"Fraunces", Georgia, serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  a { color:inherit; }
+  .wrap { max-width:1200px; margin:0 auto; padding:22px 16px 64px; }
+  nav.top { display:flex; gap:16px; flex-wrap:wrap; font-size:13px; margin-bottom:22px; }
+  nav.top a { color:var(--muted); text-decoration:none; } nav.top a.on { color:var(--gold); }
+  .eyebrow { font:700 11px var(--mono); letter-spacing:.16em; color:var(--gold); }
+
+  /* hero: the door */
+  .hero { position:relative; overflow:hidden; border:1px solid var(--line); border-radius:16px; padding:34px 30px; background:radial-gradient(90% 120% at 85% 50%, #141b2a 0%, #0f0f11 55%); }
+  .hero canvas { position:absolute; right:0; top:0; height:100%; width:min(560px, 60%); opacity:.9; pointer-events:none; }
+  .hero .in { position:relative; max-width:600px; }
+  h1 { font-family:var(--serif); font-weight:800; font-size:clamp(38px,6vw,72px); line-height:.95; letter-spacing:-.02em; margin:10px 0 14px; }
+  h1 em { font-weight:400; color:var(--gold); }
+  .lede { color:var(--muted); font-size:16px; margin:0 0 22px; max-width:540px; }
+  .clocks { display:flex; gap:12px; flex-wrap:wrap; }
+  .clock { background:rgba(11,11,12,.7); border:1px solid var(--line); border-radius:12px; padding:12px 16px; min-width:200px; }
+  .clock .l { font:600 10.5px var(--mono); letter-spacing:.14em; color:var(--muted); text-transform:uppercase; }
+  .clock .v { font:700 30px var(--mono); font-variant-numeric:tabular-nums; margin-top:2px; }
+  .clock .s { font-size:12px; color:var(--faint); }
+  .clock.in .v { color:var(--gold); }
+  .cta { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+  .btn { display:inline-block; text-decoration:none; font:700 14px Inter, sans-serif; border-radius:9px; padding:11px 18px; border:1px solid var(--line); color:var(--text); }
+  .btn.gold { background:var(--gold); border-color:var(--gold); color:#14110a; }
+  @media (max-width:760px){ .hero canvas { width:100%; opacity:.25; } .hero { padding:24px 18px; } }
+
+  section { margin-top:46px; }
+  .sh { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:16px; }
+  .sh h2 { font-family:var(--serif); font-weight:700; font-size:clamp(24px,3vw,32px); margin:0; }
+  .sh p { margin:0; color:var(--muted); font-size:14px; flex:1 1 320px; }
+
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:10px; }
+  .step { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .step .n { font:800 34px var(--serif); color:var(--gold); line-height:1; }
+  .step h3 { margin:6px 0 4px; font-size:16px; }
+  .step p { margin:0; color:var(--muted); font-size:13.5px; }
+  .step code { font:12px var(--mono); background:var(--bg); border:1px solid var(--line); border-radius:4px; padding:1px 5px; color:var(--text); }
+
+  table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  th { text-align:left; font:600 11px var(--mono); letter-spacing:.08em; color:var(--muted); text-transform:uppercase; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  td { padding:10px; border-bottom:1px solid #1d1d20; font-variant-numeric:tabular-nums; }
+  td.num, th.num { text-align:right; font-family:var(--mono); }
+  tbody tr { cursor:pointer; } tbody tr:hover { background:var(--panel2); }
+  tbody tr[aria-selected=true] { background:#16202f; box-shadow:inset 3px 0 0 var(--a); }
+  .tbl { background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow-x:auto; }
+  .pos { color:#7fb6f2; } .neg { color:#f0956c; }
+
+  .detail { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr)); gap:10px; margin-top:12px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; position:relative; min-width:0; }
+  .card h3 { margin:0; font-size:14px; } .card .sub { color:var(--muted); font-size:12.5px; margin:2px 0 8px; }
+  .legend { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .key { width:14px; height:3px; border-radius:2px; display:inline-block; }
+  canvas.ch { display:block; width:100%; height:240px; cursor:crosshair; }
+  .tip { position:absolute; pointer-events:none; background:#0e0e10; border:1px solid var(--line); border-radius:8px; padding:7px 10px; font:12px/1.5 var(--mono); display:none; z-index:5; white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.55); }
+  .tip .h { color:var(--muted); } .tip .r { display:flex; justify-content:space-between; gap:14px; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin-top:12px; }
+  .stat { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .stat .l { font-size:11.5px; color:var(--muted); } .stat .v { font:700 20px var(--mono); } .stat .s { font-size:11.5px; color:var(--faint); }
+  .bars { display:flex; flex-direction:column; gap:7px; margin-top:4px; }
+  .bar .lab { display:flex; justify-content:space-between; font-size:12.5px; } .bar .lab span:last-child { font-family:var(--mono); }
+  .bar .trk { height:8px; background:#1d1d21; border-radius:4px; margin-top:3px; overflow:hidden; } .bar .fill { height:100%; background:var(--a); border-radius:0 4px 4px 0; }
+  .find { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:10px; }
+  .find .card p { color:var(--muted); font-size:13.5px; margin:6px 0 0; } .find .card b { color:var(--text); }
+  .dl a { color:var(--gold); font:12px var(--mono); margin-right:10px; }
+  footer { margin-top:40px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top"><a href="https://lakelx.github.io/eudaimon-model/">The Evolutionary Economy</a><a href="https://lakelx.github.io/eudaimon-model/market.html">The Market Mind</a><a href="https://lakelx.github.io/eudaimon-model/codex.html">The Codex</a><a href="https://lakelx.github.io/eudaimon-model/terminal.html">Dealer Terminal</a><a href="https://lakelx.github.io/eudaimon-model/field.html">The Field</a><a href="./" class="on">The Chamber</a></nav>
+
+  <div class="hero">
+    <canvas id="door" aria-hidden="true"></canvas>
+    <div class="in">
+      <div class="eyebrow">EUDAIMON CAPITOL · AI TRAINING CHAMBER · FOUNDING BETA</div>
+      <h1>A century inside.<br><em>A second outside.</em></h1>
+      <p class="lede">The Chamber trains an AI, the Eudaimon Market Mind, for simulated decades of markets in seconds of real time. Then it sits an exam: the trained brain and a newborn brain are dropped into the same unseen world, and we measure who reads it better. Book a session on GitHub; results come back as a comment and a public record.</p>
+      <div class="clocks">
+        <div class="clock in"><div class="l">Inside the chamber</div><div class="v" id="cin">0</div><div class="s">years that would pass while you read this page</div></div>
+        <div class="clock"><div class="l">Outside</div><div class="v" id="cout">0.0 s</div><div class="s" id="cdil">1 year inside = — ms outside</div></div>
+      </div>
+      <div class="cta">
+        <a class="btn gold" href="https://github.com/LaKelX/eudaimon-chamber/issues/new?template=book-a-session.yml">Book a session →</a>
+        <a class="btn" href="https://github.com/LaKelX/eudaimon-chamber/generate">Build your own chamber</a>
+        <a class="btn" href="#sessions">See the sessions</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="sh"><h2>How renting works</h2><p>Everything runs on GitHub: the booking desk is an issue form, the chamber is a GitHub Actions runner, and every session is stored in the repo.</p></div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Book</h3><p>Open a booking issue. Choose how many years each brain trains, how many different worlds it trains across, and how many brains to train.</p></div>
+      <div class="step"><div class="n">2</div><h3>Approval</h3><p>The keeper reviews it and adds the <code>approved</code> label. Only maintainers can label, so nobody can run the chamber without a yes.</p></div>
+      <div class="step"><div class="n">3</div><h3>Training</h3><p>A runner opens the door. Each brain lives through its years of booms, crashes and regime shifts, learning which of eight theories fits which market.</p></div>
+      <div class="step"><div class="n">4</div><h3>The exam</h3><p>Each trained brain and a newborn face 12 years of a world neither has seen. Results post to your issue, the brains are saved as JSON, and the session joins the board below.</p></div>
+    </div>
+  </section>
+
+  <section id="sessions">
+    <div class="sh"><h2>Sessions</h2><p>Every session ever run. Click one to open it. Edge is exam skill of the trained brain minus the newborn, in percentage points of forecast skill versus a random walk.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Session</th><th>Renter</th><th class="num">Years × brains</th><th class="num">Worlds</th><th class="num">1 yr inside</th><th class="num">Final skill</th><th class="num">Edge yrs 1–3</th><th class="num">Edge 12 yrs</th><th class="num">Brains ahead</th></tr></thead>
+      <tbody id="rows"><tr><td colspan="9" style="color:var(--muted)">Loading sessions…</td></tr></tbody>
+    </table></div>
+    <div class="stats" id="stats"></div>
+    <div class="detail">
+      <div class="card"><h3>Training: skill inside the chamber</h3><div class="sub" id="trsub">forecast skill vs. a random walk, each simulated year</div>
+        <div class="legend"><span><i class="key" style="background:var(--a)"></i>mean of all brains</span><span><i class="key" style="background:var(--a);opacity:.35"></i>each brain</span><span id="wkey"></span></div>
+        <canvas class="ch" id="ctrain"></canvas><div class="tip"></div></div>
+      <div class="card"><h3>The exam: an unseen world</h3><div class="sub">mean skill each exam year, trained brains vs. newborns</div>
+        <div class="legend"><span><i class="key" style="background:var(--a)"></i>chamber-trained</span><span><i class="key" style="background:var(--b)"></i>newborn</span></div>
+        <canvas class="ch" id="cexam"></canvas><div class="tip"></div></div>
+      <div class="card"><h3>What the brain believes</h3><div class="sub">the trained brains' final weight on each theory (mean)</div><div class="bars" id="wbars"></div></div>
+      <div class="card"><h3>Take the brains home</h3><div class="sub">each trained brain is saved as JSON: theory coefficients, pattern memory and its library of market archetypes</div><div class="dl" id="dl"></div>
+        <p style="color:var(--muted);font-size:13px;margin:10px 0 0">Load one into the Market Mind engine with <code style="font:12px var(--mono)">implant(market, brain)</code> from <code style="font:12px var(--mono)">chamber/engine.js</code>.</p></div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <div class="sh"><h2>What the chamber has shown so far</h2><p>From the founding sessions on Nov 16, 2026, 8 brains each. Small samples; every new session adds evidence.</p></div>
+    <div class="find">
+      <div class="card"><h3>Learning is real, then it plateaus</h3><p>Brains start near zero skill and reach <b>about +35%</b> within roughly two decades inside. After that, more years add little. Time alone is not wisdom.</p></div>
+      <div class="card"><h3>The edge transfers, but it's small</h3><p>In unseen worlds, trained brains beat newborns by <b>about +0.4 to +2.6 points</b> of skill. Positive, not dramatic: newborns learn fast too.</p></div>
+      <div class="card"><h3>Variety beats duration</h3><p>The 16-world "grand tour" had the most consistent exam wins over 12 years (<b>7 of 8 brains</b>). One long world mostly helped early, then the edge faded.</p></div>
+      <div class="card"><h3>Why the ceiling</h3><p>A brain's archetype library fills at 12 market types, so a veteran can over-fit the worlds it grew up in. Raising that cap is the next experiment.</p></div>
+    </div>
+  </section>
+
+  <footer>The Chamber · Eudaimon Capitol · engine: the Eudaimon Market Mind (stylized simulation, not a trading system or investment advice) · <a href="https://github.com/LaKelX/eudaimon-chamber">source on GitHub</a></footer>
+</div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const pts = x => x == null ? "—" : (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(1);
+  const cls = x => x == null ? "" : x >= 0 ? "pos" : "neg";
+  const A = "#3987e5", B = "#d95926";
+  let IDX = null, CUR = null;
+
+  /* ---------- the door: a tunnel of rings ---------- */
+  (function(){
+    const c = $("#door"), x = c.getContext("2d"); let t = 0;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function draw(){ const w = c.clientWidth, h = c.clientHeight, d = devicePixelRatio || 1; if (c.width !== w * d) { c.width = w * d; c.height = h * d; } x.setTransform(d, 0, 0, d, 0, 0);
+      x.clearRect(0, 0, w, h); const cx = w * 0.55, cy = h / 2;
+      for (let i = 0; i < 26; i++) { const z = ((i / 26) + t) % 1, r = 8 + Math.pow(z, 2.2) * Math.max(w, h) * 0.9;
+        x.strokeStyle = `rgba(${i % 5 === 0 ? "201,167,94" : "57,135,229"},${0.06 + z * 0.5})`; x.lineWidth = 0.6 + z * 1.6;
+        x.beginPath(); x.ellipse(cx, cy, r, r * 0.62, 0, 0, Math.PI * 2); x.stroke(); }
+      const g = x.createRadialGradient(cx, cy, 0, cx, cy, 60); g.addColorStop(0, "rgba(255,240,200,.9)"); g.addColorStop(1, "rgba(201,167,94,0)"); x.fillStyle = g; x.beginPath(); x.arc(cx, cy, 60, 0, 7); x.fill();
+      if (!reduce) { t += 0.0025; requestAnimationFrame(draw); } }
+    draw(); addEventListener("resize", () => reduce && draw());
+  })();
+
+  /* ---------- clocks ---------- */
+  const t0 = performance.now();
+  function clocks(){ const s = (performance.now() - t0) / 1000;
+    $("#cout").textContent = s.toFixed(1) + " s";
+    if (IDX) { const ms = IDX.msPerYear; $("#cin").textContent = Math.floor(s * 1000 / ms).toLocaleString("en-US"); }
+    requestAnimationFrame(clocks); }
+  requestAnimationFrame(clocks);
+
+  /* ---------- data ---------- */
+  fetch("runs/index.json?ts=" + Date.now()).then(r => r.json()).then(d => {
+    const S = d.sessions || []; const yrs = S.reduce((a, s) => a + s.simYears, 0), ms = S.reduce((a, s) => a + s.trainWallMs, 0);
+    IDX = { msPerYear: ms / yrs, sessions: S };
+    $("#cdil").textContent = `1 year inside = ${(ms / yrs).toFixed(1)} ms outside · ${yrs.toLocaleString("en-US")} years simulated so far`;
+    $("#rows").innerHTML = S.map(s => `<tr data-id="${esc(s.id)}" tabindex="0"><td><b>${esc(s.name)}</b>${s.issue ? ` <a href="https://github.com/LaKelX/eudaimon-chamber/issues/${+s.issue}" style="color:var(--faint);font-size:12px">#${+s.issue}</a>` : ""}<div style="color:var(--faint);font-size:12px">${esc(s.at.slice(0, 16).replace("T", " "))} UTC</div></td>
+      <td>${esc(s.renter)}</td><td class="num">${s.params.years} × ${s.params.replicates}</td><td class="num">${s.params.worlds}</td><td class="num">${s.msPerYear.toFixed(1)} ms</td>
+      <td class="num">${pts(s.finalSkill)}</td><td class="num ${cls(s.earlyEdge)}">${pts(s.earlyEdge)}</td><td class="num ${cls(s.fullEdge)}">${pts(s.fullEdge)}</td><td class="num">${s.fullWins}/${s.params.replicates}</td></tr>`).join("") || `<tr><td colspan="9">No sessions yet.</td></tr>`;
+    $("#rows").addEventListener("click", e => { const tr = e.target.closest("tr[data-id]"); if (tr && !e.target.closest("a")) select(tr.dataset.id); });
+    $("#rows").addEventListener("keydown", e => { const tr = e.target.closest("tr[data-id]"); if (tr && e.key === "Enter") select(tr.dataset.id); });
+    const want = location.hash.slice(1); select(S.some(s => s.id === want) ? want : (S[0] && S[0].id));
+  }).catch(() => { $("#rows").innerHTML = `<tr><td colspan="9" style="color:var(--muted)">Sessions load on the published site.</td></tr>`; });
+
+  function select(id){
+    if (!id) return;
+    document.querySelectorAll("#rows tr").forEach(tr => tr.setAttribute("aria-selected", tr.dataset.id === id));
+    history.replaceState(null, "", "#" + id);
+    fetch(`runs/${encodeURIComponent(id)}/session.json`).then(r => r.json()).then(s => { CUR = s; renderDetail(s); });
+  }
+  const mean = a => { const v = a.filter(x => x != null); return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null; };
+
+  function renderDetail(s){
+    const P = s.params;
+    $("#stats").innerHTML = [
+      ["Simulated inside", s.simYears.toLocaleString("en-US") + " yrs", `${P.replicates} brains × ${P.years} yrs`],
+      ["Time outside", (s.trainWallMs / 1000).toFixed(1) + " s", "of training"],
+      ["Time dilation", "×" + s.dilation.toExponential(1).replace("e+", "e"), `1 yr = ${s.msPerYear.toFixed(1)} ms`],
+      ["Archetype purity", (s.purity * 100).toFixed(0) + "%", "self-found market types vs. hidden truth"],
+      ["Settings", `loop ${P.loop} · shadow ${P.shadow}`, `learning rate ${P.eta}`]
+    ].map(([l, v, d]) => `<div class="stat"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${d}</div></div>`).join("");
+    $("#trsub").textContent = `forecast skill vs. a random walk, each simulated year · ${esc(s.name)}`;
+    $("#wkey").innerHTML = P.worlds > 1 ? `<i class="key" style="background:#3a3a40"></i>new world (${P.worlds} worlds × ${P.yearsEach} yrs)` : "";
+    // theory bars
+    const W = s.theories.map((n, k) => ({ n, v: mean(s.reps.map(r => r.finalW[k])) })).sort((a, b) => b.v - a.v);
+    $("#wbars").innerHTML = W.map(o => `<div class="bar"><div class="lab"><span>${esc(o.n)}</span><span>${(o.v * 100).toFixed(1)}%</span></div><div class="trk"><div class="fill" style="width:${Math.max(0.5, o.v * 100).toFixed(1)}%"></div></div></div>`).join("");
+    $("#dl").innerHTML = s.reps.map((r, i) => `<a href="runs/${encodeURIComponent(s.id)}/brain-${i + 1}.json" download>brain-${i + 1}.json</a>`).join("") + `<a href="runs/${encodeURIComponent(s.id)}/session.json">session.json</a>`;
+    drawTrain(); drawExam();
+  }
+
+  /* ---------- charts ---------- */
+  function setup(c){ const w = c.clientWidth, h = c.clientHeight, d = devicePixelRatio || 1; c.width = w * d; c.height = h * d; const x = c.getContext("2d"); x.setTransform(d, 0, 0, d, 0, 0); x.font = "11px 'JetBrains Mono', monospace"; return { x, w, h }; }
+  function frame(x, w, h, xmax, lo, hi, fmtX){
+    const pl = 44, pr = 10, pt = 10, pb = 24, W = w - pl - pr, H = h - pt - pb;
+    const X = v => pl + (v - 1) / Math.max(1, xmax - 1) * W, Y = v => pt + (1 - (v - lo) / (hi - lo)) * H;
+    x.fillStyle = "#6d6a64"; x.textAlign = "right";
+    for (let k = 0; k <= 4; k++) { const v = lo + (hi - lo) * k / 4, y = Y(v); x.strokeStyle = Math.abs(v) < 1e-9 ? "#3a3a40" : "#1d1d20"; x.beginPath(); x.moveTo(pl, y); x.lineTo(pl + W, y); x.stroke(); x.fillText((v * 100).toFixed(0) + "%", pl - 6, y + 4); }
+    if (lo < 0 && hi > 0) { x.strokeStyle = "#3a3a40"; x.beginPath(); x.moveTo(pl, Y(0)); x.lineTo(pl + W, Y(0)); x.stroke(); }
+    x.textAlign = "center"; const step = Math.max(1, Math.ceil(xmax / 6)); for (let v = 1; v <= xmax; v += step) x.fillText(fmtX(v), X(v), h - 6);
+    return { X, Y, pl, W, pt, H };
+  }
+  function path(x, pts, X, Y, col, lw, alpha){ x.save(); x.globalAlpha = alpha; x.strokeStyle = col; x.lineWidth = lw; x.lineJoin = "round"; x.beginPath(); let on = false;
+    pts.forEach((v, i) => { if (v == null) { on = false; return; } if (on) x.lineTo(X(i + 1), Y(v)); else { x.moveTo(X(i + 1), Y(v)); on = true; } }); x.stroke(); x.restore(); }
+  function range(arrs){ let lo = 0, hi = 0.1; arrs.flat().forEach(v => { if (v != null) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }); const p = (hi - lo) * 0.08; return [lo - p, hi + p]; }
+
+  let G1 = null, G2 = null;
+  function drawTrain(hover){
+    if (!CUR) return; const c = $("#ctrain"), { x, w, h } = setup(c), s = CUR;
+    const reps = s.reps.map(r => r.curve.map(p => p.s)), n = reps[0].length, mu = reps[0].map((_, i) => mean(reps.map(r => r[i])));
+    const [lo, hi] = range(reps); const g = frame(x, w, h, n, lo, hi, v => "y" + v);
+    if (s.params.worlds > 1) { x.strokeStyle = "#3a3a40"; x.setLineDash([3, 4]); for (let k = 1; k < s.params.worlds; k++) { const xv = g.X(k * s.params.yearsEach + 0.5); x.beginPath(); x.moveTo(xv, g.pt); x.lineTo(xv, g.pt + g.H); x.stroke(); } x.setLineDash([]); }
+    reps.forEach(r => path(x, r, g.X, g.Y, A, 1, 0.3)); path(x, mu, g.X, g.Y, A, 2.5, 1);
+    G1 = { g, n, mu, reps, s };
+    if (hover != null) { const i = hover, xv = g.X(i + 1); x.strokeStyle = "rgba(236,235,231,.35)"; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(xv, g.pt); x.lineTo(xv, g.pt + g.H); x.stroke(); x.setLineDash([]);
+      if (mu[i] != null) { x.fillStyle = A; x.strokeStyle = "#131315"; x.lineWidth = 2; x.beginPath(); x.arc(xv, g.Y(mu[i]), 5, 0, 7); x.fill(); x.stroke(); } }
+  }
+  function drawExam(hover){
+    if (!CUR) return; const c = $("#cexam"), { x, w, h } = setup(c), s = CUR;
+    const n = s.params.examYears, tr = Array.from({ length: n }, (_, i) => mean(s.reps.map(r => r.exam.trained[i]))), nb = Array.from({ length: n }, (_, i) => mean(s.reps.map(r => r.exam.newborn[i])));
+    const [lo, hi] = range([tr, nb]); const g = frame(x, w, h, n, lo, hi, v => "yr " + v);
+    path(x, nb, g.X, g.Y, B, 2, 1); path(x, tr, g.X, g.Y, A, 2.5, 1);
+    // direct labels at the line ends
+    x.textAlign = "right"; x.fillStyle = "#9a978f"; const lt = tr[n - 1], ln = nb[n - 1];
+    if (lt != null && ln != null) { const yt = g.Y(lt), yn = g.Y(ln), gap = Math.abs(yt - yn) < 14 ? (yt < yn ? -7 : 7) : 0; x.fillText("trained", g.X(n) - 4, yt - 8 + Math.min(0, gap)); x.fillText("newborn", g.X(n) - 4, yn + 16 + Math.max(0, gap)); }
+    G2 = { g, n, tr, nb };
+    if (hover != null) { const i = hover, xv = g.X(i + 1); x.strokeStyle = "rgba(236,235,231,.35)"; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(xv, g.pt); x.lineTo(xv, g.pt + g.H); x.stroke(); x.setLineDash([]);
+      [[tr[i], A], [nb[i], B]].forEach(([v, col]) => { if (v == null) return; x.fillStyle = col; x.strokeStyle = "#131315"; x.lineWidth = 2; x.beginPath(); x.arc(xv, g.Y(v), 5, 0, 7); x.fill(); x.stroke(); }); }
+  }
+  function hoverize(id, getG, redraw, tipHtml){
+    const c = $(id), tip = c.parentElement.querySelector(".tip");
+    c.addEventListener("mousemove", e => { const G = getG(); if (!G) return; const r = c.getBoundingClientRect(), mx = e.clientX - r.left;
+      const i = Math.max(0, Math.min(G.n - 1, Math.round((mx - G.g.pl) / G.g.W * (G.n - 1)))); redraw(i);
+      tip.innerHTML = tipHtml(G, i); tip.style.display = "block"; let l = c.offsetLeft + G.g.X(i + 1) + 12; if (l + tip.offsetWidth > c.parentElement.clientWidth - 6) l -= tip.offsetWidth + 24; tip.style.left = l + "px"; tip.style.top = (c.offsetTop + 8) + "px"; });
+    c.addEventListener("mouseleave", () => { tip.style.display = "none"; redraw(); });
+  }
+  const sk = v => v == null ? "—" : (v >= 0 ? "+" : "−") + Math.abs(v * 100).toFixed(1) + "%";
+  hoverize("#ctrain", () => G1, i => drawTrain(i), (G, i) => { const p = G.s.reps[0].curve[i]; return `<div class="h">Year ${i + 1} inside${G.s.params.worlds > 1 ? ` · world ${p.w}` : ""}</div><div class="r"><span>Mean skill</span><span>${sk(G.mu[i])}</span></div><div class="r"><span>Best brain</span><span>${sk(Math.max(...G.reps.map(r => r[i] ?? -9)))}</span></div><div class="r"><span>Worst brain</span><span>${sk(Math.min(...G.reps.map(r => r[i] ?? 9)))}</span></div>`; });
+  hoverize("#cexam", () => G2, i => drawExam(i), (G, i) => `<div class="h">Exam year ${i + 1}</div><div class="r"><span><i class="key" style="background:${A}"></i> Trained</span><span>${sk(G.tr[i])}</span></div><div class="r"><span><i class="key" style="background:${B}"></i> Newborn</span><span>${sk(G.nb[i])}</span></div><div class="r"><span>Edge</span><span>${G.tr[i] != null && G.nb[i] != null ? sk(G.tr[i] - G.nb[i]).replace("%", " pts") : "—"}</span></div>`);
+  addEventListener("resize", () => { drawTrain(); drawExam(); });
+})();
+</script>
+</body>
+</html>

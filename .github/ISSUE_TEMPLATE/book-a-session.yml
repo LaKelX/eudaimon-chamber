@@ -1,0 +1,41 @@
+name: Book a Chamber session
+description: Rent time in the Chamber. A Market Mind trains for simulated decades, then sits an exam against a newborn.
+title: "Session: "
+labels: ["session"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **How it works.** Fill this in and submit. The Chamber's keeper reviews bookings and adds the `approved` label; the session then runs on GitHub Actions, results are posted here as a comment, and the session appears on the dashboard. Founding beta: sessions are free and approved by hand.
+  - type: input
+    id: name
+    attributes: { label: Session name, description: "Shown on the public dashboard (letters, numbers, basic punctuation).", placeholder: "My first century" }
+    validations: { required: true }
+  - type: dropdown
+    id: years
+    attributes: { label: Years in the chamber, description: Simulated years each brain trains., options: ["12 years", "25 years", "50 years", "100 years", "250 years", "500 years"], default: 3 }
+    validations: { required: true }
+  - type: dropdown
+    id: worlds
+    attributes: { label: Worlds, description: "Split the training across several different simulated markets. Variety tends to generalize better than one long world.", options: ["1 world", "2 worlds", "4 worlds", "8 worlds", "16 worlds"], default: 0 }
+    validations: { required: true }
+  - type: dropdown
+    id: brains
+    attributes: { label: Brains, description: Independent replicates, so the result isn't one lucky seed., options: ["1 brain", "4 brains", "8 brains"], default: 1 }
+    validations: { required: true }
+  - type: input
+    id: loop
+    attributes: { label: Feedback loop (0 to 1), description: "How strongly the crowd follows the Mind's published forecast.", value: "0.6" }
+  - type: input
+    id: shadow
+    attributes: { label: Shadow habits (0 to 2), description: "Strength of the crowd's loss scars, herding and dip-buying reflex.", value: "1.0" }
+  - type: input
+    id: eta
+    attributes: { label: Learning rate (0.1 to 3), description: How fast the Mind re-weights its eight theories., value: "0.9" }
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Terms
+      options:
+        - label: I understand this is a stylized simulation for research and education, not a trading system or investment advice.
+          required: true

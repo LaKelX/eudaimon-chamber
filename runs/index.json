@@ -1,0 +1,86 @@
+{
+ "sessions": [
+  {
+   "id": "20261116T0823-vpss",
+   "name": "Founding session: the short course",
+   "renter": "LaKelX",
+   "issue": null,
+   "at": "2026-11-16T08:23:03.044Z",
+   "params": {
+    "years": 12,
+    "worlds": 1,
+    "yearsEach": 12,
+    "replicates": 8,
+    "loop": 0.6,
+    "shadow": 1,
+    "eta": 0.9,
+    "examYears": 12
+   },
+   "simYears": 96,
+   "trainWallMs": 1519,
+   "msPerYear": 15.823,
+   "dilation": 1994423700,
+   "finalSkill": 0.1463,
+   "earlyEdge": 0.0059,
+   "fullEdge": 0.0037,
+   "earlyWins": 4,
+   "fullWins": 4,
+   "purity": 0.5304
+  },
+  {
+   "id": "20261116T0822-4gbq",
+   "name": "Founding session: the grand tour",
+   "renter": "LaKelX",
+   "issue": null,
+   "at": "2026-11-16T08:22:58.519Z",
+   "params": {
+    "years": 96,
+    "worlds": 16,
+    "yearsEach": 6,
+    "replicates": 8,
+    "loop": 0.6,
+    "shadow": 1,
+    "eta": 0.9,
+    "examYears": 12
+   },
+   "simYears": 768,
+   "trainWallMs": 10643,
+   "msPerYear": 13.858,
+   "dilation": 2277199737,
+   "finalSkill": 0.1244,
+   "earlyEdge": 0.0197,
+   "fullEdge": 0.0117,
+   "earlyWins": 6,
+   "fullWins": 7,
+   "purity": 0.6976
+  },
+  {
+   "id": "20261116T0822-h3db",
+   "name": "Founding session: a century in one world",
+   "renter": "LaKelX",
+   "issue": null,
+   "at": "2026-11-16T08:22:45.080Z",
+   "params": {
+    "years": 100,
+    "worlds": 1,
+    "yearsEach": 100,
+    "replicates": 8,
+    "loop": 0.6,
+    "shadow": 1,
+    "eta": 0.9,
+    "examYears": 12
+   },
+   "simYears": 800,
+   "trainWallMs": 10538,
+   "msPerYear": 13.172,
+   "dilation": 2395718353,
+   "finalSkill": 0.3475,
+   "earlyEdge": 0.0262,
+   "fullEdge": 0.0085,
+   "earlyWins": 7,
+   "fullWins": 5,
+   "purity": 0.4456
+  }
+ ],
+ "updated": "2026-11-16T08:23:49.971Z"
+}

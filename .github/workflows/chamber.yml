@@ -1,0 +1,61 @@
+name: Chamber session
+on:
+  workflow_dispatch:
+    inputs:
+      name: { description: "Session name", type: string, default: "Owner session" }
+      years: { description: "Years in the chamber (per brain)", type: choice, options: ["12", "25", "50", "100", "250", "500"], default: "100" }
+      worlds: { description: "Worlds (curriculum)", type: choice, options: ["1", "2", "4", "8", "16"], default: "1" }
+      replicates: { description: "Brains", type: choice, options: ["1", "4", "8"], default: "4" }
+      loop: { description: "Feedback loop 0–1", type: string, default: "0.6" }
+      shadow: { description: "Shadow habits 0–2", type: string, default: "1.0" }
+      eta: { description: "Learning rate 0.1–3", type: string, default: "0.9" }
+  issues:
+    types: [labeled]
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: chamber
+  cancel-in-progress: false
+jobs:
+  session:
+    # Bookings run only after a maintainer adds the "approved" label (only collaborators can label).
+    if: github.event_name == 'workflow_dispatch' || (github.event.label.name == 'approved' && contains(github.event.issue.labels.*.name, 'session') && github.event.issue.state == 'open')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Enter the chamber
+        env:
+          IN_NAME: ${{ inputs.name }}
+          IN_YEARS: ${{ inputs.years }}
+          IN_WORLDS: ${{ inputs.worlds }}
+          IN_REPLICATES: ${{ inputs.replicates }}
+          IN_LOOP: ${{ inputs.loop }}
+          IN_SHADOW: ${{ inputs.shadow }}
+          IN_ETA: ${{ inputs.eta }}
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+        run: node chamber/session.js
+      - name: Store the session
+        run: |
+          git config user.name "eudaimon-chamber-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add runs
+          git commit -m "Chamber session $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase -q && git push
+      - name: Report to the renter
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          gh issue comment "$ISSUE" --body-file comment.md
+          gh issue close "$ISSUE" --reason completed
+      - name: Report a failure
+        if: failure() && github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: gh issue comment "$ISSUE" --body "The chamber hit an error on this session. The maintainer has been notified by the failed run; no charge, and it can be re-run by re-applying the approved label."
