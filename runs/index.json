@@ -1,6 +1,33 @@
 {
  "sessions": [
   {
+   "id": "20261116T0829-inwb",
+   "name": "Keeper test: four worlds",
+   "renter": "LaKelX",
+   "issue": 1,
+   "at": "2026-11-16T08:29:22.065Z",
+   "params": {
+    "years": 52,
+    "worlds": 4,
+    "yearsEach": 13,
+    "replicates": 4,
+    "loop": 0.6,
+    "shadow": 1,
+    "eta": 0.9,
+    "examYears": 12
+   },
+   "simYears": 208,
+   "trainWallMs": 3009,
+   "msPerYear": 14.466,
+   "dilation": 2181449252,
+   "finalSkill": 0.1762,
+   "earlyEdge": 0.0379,
+   "fullEdge": 0.0187,
+   "earlyWins": 3,
+   "fullWins": 4,
+   "purity": 0.612
+  },
+  {
    "id": "20261116T0823-vpss",
    "name": "Founding session: the short course",
    "renter": "LaKelX",
@@ -82,5 +109,5 @@
    "purity": 0.4456
   }
  ],
- "updated": "2026-11-16T08:23:49.971Z"
+ "updated": "2026-11-16T08:29:22.065Z"
 }
